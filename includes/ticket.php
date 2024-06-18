@@ -82,7 +82,7 @@ class ticket
 			'post_id'			=> 0,
 			'poster_id'			=> (int) $user_id,
 			'poster_ip'			=> $user_ip,
-			'status_id'			=> //$project->tracker->new_status,
+			'status_id'			=> 0,//$project->tracker->new_status,
 			'component_id'		=> 0,
 			'severity_id'		=> 0,
 			'ticket_title'		=> $title,
