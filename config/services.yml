@@ -1,0 +1,28 @@
+services:
+    _defaults:
+        autowire: true
+        bind:
+            $container: '@service_container'
+            $root_path: '%core.root_path%'
+            $php_ext: '%core.php_ext%'
+            $table_prefix: '%core.table_prefix%'
+
+    phpbbmodders.trackers.controller.main:
+        class: phpbbmodders\trackers\controller\main_controller
+
+    phpbbmodders.trackers.listener:
+        class: phpbbmodders\trackers\event\main_listener
+        tags:
+            - { name: event.listener }
+
+    phpbbmodders.trackers.project:
+        class: phpbbmodders\trackers\includes\project
+
+    phpbbmodders.trackers.ticket:
+        class: phpbbmodders\trackers\includes\ticket
+
+    phpbbmodders.trackers.tracker:
+        class: phpbbmodders\trackers\includes\tracker
+
+    phpbbmodders.trackers.tracker_cache:
+        class: phpbbmodders\trackers\includes\tracker_cache

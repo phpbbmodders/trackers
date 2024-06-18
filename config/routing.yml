@@ -1,0 +1,3 @@
+phpbbmodders_trackers_controller:
+    path: /trackers/{page}
+    defaults: { _controller: phpbbmodders.trackers.controller.main:display }
