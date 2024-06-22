@@ -11,7 +11,6 @@
 namespace phpbbmodders\trackers\includes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-//use phpbbmodders\trackers\constants;
 
 class ticket
 {
