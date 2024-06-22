@@ -11,6 +11,7 @@
 namespace phpbbmodders\trackers\includes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use phpbbmodders\trackers\constants;
 
 class project
 {
@@ -41,8 +42,6 @@ class project
 		$this->user = $user;
 		$this->table_prefix = $table_prefix;
 
-		$this->constants = $this->container->get('phpbbmodders.trackers.constants');
-
 		$this->ticket = $this->container->get('phpbbmodders.trackers.ticket');
 		$this->tracker_cache = $this->container->get('phpbbmodders.trackers.tracker_cache');
 
@@ -63,7 +62,7 @@ class project
 	/**
 	 * Create a project
 	 */
-	public function create($tracker_id, $project_name, $project_visibility = $this->constants::ITEM_PUBLIC, $project_status = $this->constants::ITEM_ACTIVE)
+	public function create($tracker_id, $project_name, $project_visibility = constants::ITEM_PUBLIC, $project_status = constants::ITEM_ACTIVE)
 	{
 		$project_data = [
 			'tracker_id'			=> (int) $tracker_id,
@@ -113,7 +112,7 @@ class project
 	{
 		$user_id = (empty($user_id)) ? (int) $this->user->data['user_id'] : (int) $user_id;
 
-		if ($this->project_visibility = $this->constants::ITEM_PRIVATE && !$this->is_team_user($user_id))
+		if ($this->project_visibility = constants::ITEM_PRIVATE && !$this->is_team_user($user_id))
 		{
 			return false;
 		}
