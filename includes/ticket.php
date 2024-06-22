@@ -11,7 +11,6 @@
 namespace phpbbmodders\trackers\includes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use phpbbmodders\trackers\constants;
 
 class ticket
 {
@@ -46,6 +45,8 @@ class ticket
 		$this->language = $language;
 		$this->user = $user;
 		$this->table_prefix = $table_prefix;
+
+		$this->constants = $this->container->get('phpbbmodders.trackers.constants');
 
 		$this->project = $this->container->get('phpbbmodders.trackers.project');
 		$this->tracker_cache = $this->container->get('phpbbmodders.trackers.tracker_cache');
@@ -86,7 +87,7 @@ class ticket
 			'component_id'		=> 0,
 			'severity_id'		=> 0,
 			'ticket_title'		=> $title,
-			'timestamp_created'	=> time(),
+			'ticket_time'		=> time(),
 		];
 
 		$ticket = $this->base_vars($ticket_data);

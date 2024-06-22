@@ -1,0 +1,45 @@
+.main {
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	position: relative;
+	overflow: hidden;
+}
+
+.wide {
+	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
+	width: 100% !important;
+}
+
+/** Menu listing */
+ul.menu {
+	border-top: 1px solid #ffffff;
+	list-style: none;
+}
+
+ul.menu li {
+	border-bottom: 1px solid #cccccc;
+	margin: 0;
+	padding: 5px 0 4px;
+}
+
+ul.menu li:last-child {
+	border-bottom: none;
+}
+
+/** Extras column */
+.extras {
+	float: right;
+	width: 260px;
+	margin: 26px 0 30px 30px;
+}
+
+div.mini-panel {
+	border-radius: 7px;
+	margin-bottom: 5px;
+	padding: 5px 10px;
+	background-color: #ebebeb;
+}
+
+div.mini-panel h3 {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	margin: 5px 0 0;
+}

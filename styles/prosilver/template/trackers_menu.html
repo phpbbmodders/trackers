@@ -1,0 +1,10 @@
+<div class="mini-panel">
+	<div class="inner">
+	<h3>{{ lang('TRACKERS') }}</h3>
+	<ul class="menu">
+		{% for tracker in trackers %}
+		<li><a href="{{ tracker.U_VIEWTRACKER }}">{{ tracker.TRACKER_NAME }}</a></li>
+		{% endfor %}
+	</ul>
+	</div>
+</div>
