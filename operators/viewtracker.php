@@ -55,6 +55,8 @@ class viewtracker
 		$this->template = $template;
 		$this->user = $user;
 
+		$this->functions = $this->container->get('phpbbmodders.trackers.functions');
+
 		$this->tracker = $this->container->get('phpbbmodders.trackers.tracker');
 		$this->project = $this->container->get('phpbbmodders.trackers.project');
 	}
@@ -114,6 +116,15 @@ class viewtracker
 
 			'TRACKER_NAME'	=> $this->language->lang($tracker->tracker_name),
 		]);
+
+		$navlinks = [
+			[
+				'FORUM_NAME'	=> $this->language->lang($tracker->tracker_name),
+				'U_VIEW_FORUM'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewtracker', 't' => (int) $tracker_id]),
+			],
+		];
+
+		$this->functions->generate_navlinks($navlinks);
 
 		return $this->helper->render('viewtracker_body.html', $this->language->lang($tracker->tracker_name));
 	}
