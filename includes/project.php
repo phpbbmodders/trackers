@@ -42,7 +42,6 @@ class project
 		$this->user = $user;
 		$this->table_prefix = $table_prefix;
 
-		$this->ticket = $this->container->get('phpbbmodders.trackers.ticket');
 		$this->tracker_cache = $this->container->get('phpbbmodders.trackers.tracker_cache');
 
 		if (!empty($object_data))
@@ -147,16 +146,6 @@ class project
 	}
 
 	/**
-	 * Add a ticket to this project
-	 */
-	public function add_ticket($title, $message)
-	{
-		$ticket = $this->ticket->create($this->project_id, $this->user->data['user_id'], $this->user->ip, $title, $message);
-
-		return $ticket;
-	}
-
-	/**
 	 * Add a user to the team member list for this project
 	 */
 	public function add_team_user($user_id)
@@ -166,7 +155,7 @@ class project
 			'user_id'		=> $user_id,
 		];
 
-		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'trackers_project_auth ' . $this->db->sql_build_array('INSERT', $sql_data));
+		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'trackers_projects_auth ' . $this->db->sql_build_array('INSERT', $sql_data));
 
 		// Destroy the cache
 		$this->tracker_cache->destroy_team_users_cache($this->project_id);
@@ -182,7 +171,7 @@ class project
 			'group_id'		=> $group_id,
 		];
 
-		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'trackers_project_auth ' . $this->db->sql_build_array('INSERT', $sql_data));
+		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'trackers_projects_auth ' . $this->db->sql_build_array('INSERT', $sql_data));
 
 		// Destroy the cache
 		$this->tracker_cache->destroy_team_groups_cache($this->project_id);
@@ -194,7 +183,7 @@ class project
 	public function remove_team_user($user_id)
 	{
 		$sql = 'DELETE
-			FROM ' . $this->table_prefix . 'trackers_project_auth
+			FROM ' . $this->table_prefix . 'trackers_projects_auth
 			WHERE project_id = ' . (int) $this->project_id . '
 				AND user_id = ' . (int) $user_id;
 		$result = $this->db->sql_query($sql);
@@ -211,7 +200,7 @@ class project
 	public function remove_team_group($group_id)
 	{
 		$sql = 'DELETE
-			FROM trackers_project_auth
+			FROM trackers_projects_auth
 			WHERE project_id = ' . (int) $this->project_id . '
 				AND group_id = ' . (int) $group_id;
 		$result = $this->db->sql_query($sql);

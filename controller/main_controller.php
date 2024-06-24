@@ -42,6 +42,10 @@ class main_controller
 	{
 		switch ($page)
 		{
+			case 'viewtracker':
+				return $this->container->get('phpbbmodders.trackers.viewtracker')->display();
+			break;
+
 			default:
 				throw new \phpbb\exception\http_exception(404, $this->language->lang('NO_PAGE_MODE'));
 			break;

@@ -60,7 +60,7 @@ class tracker
 	public function load($tracker_id)
 	{
 		// Determine which tracker the user requested
-		$tracker_data = $this->tracker_cache->get_tracker_data($tracker);
+		$tracker_data = $this->tracker_cache->get_tracker_data($tracker_id);
 
 		if (!$tracker_data)
 		{

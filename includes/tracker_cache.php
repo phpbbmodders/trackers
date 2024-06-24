@@ -300,7 +300,7 @@ class tracker_cache
 		if (!$groups || !isset($groups[$project_id]))
 		{
 			$sql = 'SELECT g.group_id, g.group_name
-				FROM ' . $this->table_prefix . 'trackers_project_auth a, ' . $this->table_prefix . 'groups g
+				FROM ' . $this->table_prefix . 'trackers_projects_auth a, ' . $this->table_prefix . 'groups g
 				WHERE a.project_id = ' . (int) $project_id . '
 					AND a.group_id = g.group_id
 				ORDER BY g.group_name';
@@ -352,7 +352,7 @@ class tracker_cache
 
 			// Get the users
 			$sql = 'SELECT u.user_id, u.username
-				FROM ' . $this->table_prefix . 'trackers_project_auth a, ' . $this->table_prefix . 'users u
+				FROM ' . $this->table_prefix . 'trackers_projects_auth a, ' . $this->table_prefix . 'users u
 				WHERE u.user_id = a.user_id
 					AND a.project_id = ' . (int) $project_id;
 			$result = $this->db->sql_query($sql);
@@ -363,7 +363,7 @@ class tracker_cache
 			$this->db->sql_freeresult($result);
 
 			$sql = 'SELECT group_id
-				FROM ' . $this->table_prefix . 'trackers_project_auth
+				FROM ' . $this->table_prefix . 'trackers_projects_auth
 				WHERE project_id = ' . (int) $project_id;
 			$result = $this->db->sql_query($sql);
 			while ($row = $this->db->sql_fetchrow($result))

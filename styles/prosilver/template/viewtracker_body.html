@@ -1,0 +1,56 @@
+{% INCLUDECSS '@phpbbmodders_trackers/common.css' %}
+{% include 'overall_header.html' %}
+
+<div class="extras">
+	{% include 'trackers_menu.html' %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ TRACKER_NAME }}</h3>
+		<ul class="menu">
+			<li><a href="{{ U_TRACKER_SEARCH }}">{{ lang('SEARCH_TRACKER') }}</a></li>
+			{% if S_MY_TICKETS %}
+			<li><a href="{{ U_TRACKER_MY_TICKETS }}">{{ lang('MY_TICKETS') }}</a></li>
+			<li><a href="{{ U_TRACKER_MY_TICKETS_GROUPS }}">{{ lang('MY_TICKETS_GROUPS') }}</a></li>
+			{% endif %}
+			<li><a href="{{ U_STATISTICS }}">{{ lang('TRACKER_STATISTICS') }}</a></li>
+		</ul>
+		</div>
+	</div>
+</div>
+
+<div class="main">
+	<h2>{{ TRACKER_NAME }}</h2>
+	<p>{{ lang('SELECT_PROJECT') }}</p>
+	{% if S_TRACKER_PRIVATE %}<p><strong>{{ lang('TRACKER_PRIVATE') }}</strong></p>{% endif %}
+
+	<div class="forabg">
+		<div class="inner">
+		<table class="table1" cellspacing="0">
+			<colgroup>
+				<col width="200" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>{{ lang('PROJECT_NAME') }}</th>
+					<th>{{ lang('DESCRIPTION') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if S_NO_PROJECTS %}
+				<tr style="height: 50px;">
+					<td class="bg1" colspan="2" align="center">{{ lang('NO_PROJECTS') }}</td>
+				</tr>
+				{% endif %}
+				{% for project in projects %}
+				<tr class="{% if project.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+					<td><a href="{{ project.U_VIEWPROJECT }}">{{ project.NAME }}</a></td>
+					<td>{{ project.DESCRIPTION }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+
+{% include 'overall_footer.html' %}

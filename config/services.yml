@@ -18,11 +18,11 @@ services:
     phpbbmodders.trackers.project:
         class: phpbbmodders\trackers\includes\project
 
-    phpbbmodders.trackers.ticket:
-        class: phpbbmodders\trackers\includes\ticket
-
     phpbbmodders.trackers.tracker:
         class: phpbbmodders\trackers\includes\tracker
 
     phpbbmodders.trackers.tracker_cache:
         class: phpbbmodders\trackers\includes\tracker_cache
+
+    phpbbmodders.trackers.viewtracker:
+        class: phpbbmodders\trackers\operators\viewtracker
