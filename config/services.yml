@@ -29,3 +29,6 @@ services:
 
     phpbbmodders.trackers.viewtracker:
         class: phpbbmodders\trackers\operators\viewtracker
+
+    phpbbmodders.trackers.viewproject:
+        class: phpbbmodders\trackers\operators\viewproject

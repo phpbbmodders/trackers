@@ -37,8 +37,8 @@
 			</thead>
 			<tbody>
 				{% if S_NO_PROJECTS %}
-				<tr style="height: 50px;">
-					<td class="bg1" colspan="2" align="center">{{ lang('NO_PROJECTS') }}</td>
+				<tr class="error">
+					<td class="bg1 center" colspan="2">{{ lang('NO_PROJECTS') }}</td>
 				</tr>
 				{% endif %}
 				{% for project in projects %}

@@ -43,3 +43,20 @@ div.mini-panel h3 {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 	margin: 5px 0 0;
 }
+
+/** Trackers */
+th {
+	text-align: left;
+}
+
+tr.error {
+	height: 50px;
+}
+
+div.center, th.center, td.center {
+	text-align: center;
+}
+
+.action-bar.bar-bottom {
+	margin-top: 0;
+}

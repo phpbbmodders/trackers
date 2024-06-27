@@ -46,6 +46,10 @@ class main_controller
 				return $this->container->get('phpbbmodders.trackers.viewtracker')->display();
 			break;
 
+			case 'viewproject':
+				return $this->container->get('phpbbmodders.trackers.viewproject')->display();
+			break;
+
 			default:
 				throw new \phpbb\exception\http_exception(404, $this->language->lang('NO_PAGE_MODE'));
 			break;

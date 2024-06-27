@@ -1,0 +1,114 @@
+{% INCLUDECSS '@phpbbmodders_trackers/common.css' %}
+{% include 'overall_header.html' %}
+
+<div class="main wide">
+	<h2>{{ TRACKER_NAME }}</h2>
+
+	<div class="post bg2" style="text-align: center;">
+		<div class="inner">
+		<strong>{{ lang('CURRENTLY_SHOWING') ~ lang('COLON') }}</strong> {{ STATUS }}
+		</div>
+	</div>
+	<br />
+
+	<div class="action-bar bar-top">
+		<a href="{{ U_POST_NEW_TICKET }}" class="button" title="{{ lang('POST_TICKET') }}">
+			<span>{{ lang('BUTTON_NEW_TICKET') }}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+		</a>
+
+		<div class="search-box">
+			<form id="ticket_status_form" action="{{ U_ACTION }}" method="get"><div>
+				<label for="ticket_status">
+					<strong>{{ lang('FILTER_TICKETS') ~ lang('COLON') }}</strong>
+				</label>
+				<select id="ticket_status" name="ticket_status" onchange="document.getElementById('ticket_status_form').submit()">
+					<option value="-1"{% if STATUS_ID == -1 %} selected="selected"{% endif %}>{{ lang('ALL_TICKETS') }}</option>
+					<option value="0"{% if STATUS_ID == 0 %} selected="selected"{% endif %}>{{ lang('ALL_OPEN') }}</option>
+					<option value="-2"{% if STATUS_ID == -2 %} selected="selected"{% endif %}>{{ lang('ALL_CLOSED') }}</option>
+					{% if S_PROJECT_TEAM or S_SHOW_ALL_TICKETS %}
+					{% for status in ticket_status %}
+					<option value="{{ status.ID }}"{% if status.ID == STATUS_ID %} selected="selected"{% endif %}>{{ status.NAME }}</option>
+					{% endfor %}
+					{% endif %}
+				</select>
+				<noscript><div style="display: inline;"><input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button2" /></div></noscript>
+				{% for filter in filter_hidden %}
+				<input type="hidden" name="{{ filter.NAME }}" value="{{ filter.VALUE }}" />
+				{% endfor %}
+				{{ S_HIDDEN_FIELDS }}
+			</div></form>
+		</div>
+
+		<div class="pagination">
+			{{ TOTAL_TICKETS }}
+			{% if pagination %}
+				{% include 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="forabg">
+		<div class="inner">
+		<table class="table1" cellspacing="0">
+			<colgroup>
+				<col width="5%" />
+				<col width="45%" />
+				<col width="15%" />
+				<col width="20%" />
+				<col width="15%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th class="center">#</th>
+					<th>{{ lang('TITLE') }}</th>
+					<th class="center">{{ lang('COMPONENT') }}</th>
+					<th class="center">{{ lang('ASSIGNED_TO') }}</th>
+					<th class="center">{{ lang('STATUS') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if tickets %}
+				{% for ticket in tickets %}
+				<tr class="{% if ticket.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}"{% if ticket.SEV_COLOUR %} style="background-color: #{{ ticket.SEV_COLOUR }};"{% endif %}>
+					<td class="center"><strong>{{ ticket.ID }}</strong></td>
+					<td>
+						{% if ticket.S_PRIVATE %}<i>{% endif %}<strong><a href="{{ ticket.U_VIEWTICKET }}">{{ ticket.TITLE }}</a></strong>{% if ticket.S_PRIVATE %}</i>{% endif %}
+						<br />
+						{{ ticket.REPORTER }} &raquo; {{ ticket.TIME }}
+					</td>
+					<td class="center">{% if ticket.COMPONENT %}{{ ticket.COMPONENT }}{% else %}({{ lang('UNKNOWN')|lower }}){% endif %}</td>
+					<td class="center">{% if ticket.ASSIGNED %}<strong>{{ ticket.ASSIGNED }}</strong>{% else %}({{ lang('UNASSIGNED')|lower }}){% endif %}</td>
+					<td class="center">{{ ticket.STATUS }} {% if ticket.DUPLICATE_ID %} &raquo; #<a href="{{ ticket.U_DUPLICATE }}">{{ ticket.DUPLICATE_ID }}</a>{% endif %}</td>
+				</tr>
+				{% endfor %}
+				{% else %}
+				<tr class="error">
+					<td class="bg1 center" colspan="5">
+						<strong>{{ lang('NO_TICKETS') }}</strong>
+					</td>
+				</tr>
+				{% endif %}
+			</tbody>
+		</table>
+		</div>
+	</div>
+
+	<div class="action-bar bar-bottom">
+		<a href="{{ U_POST_NEW_TICKET }}" class="button" title="{{ lang('POST_TICKET') }}">
+			<span>{{ lang('BUTTON_NEW_TICKET') }}</span> <i class="icon fa-pencil fa-fw" aria-hidden="true"></i>
+		</a>
+
+		<div class="pagination">
+			{{ TOTAL_TICKETS }}
+			{% if pagination %}
+				{% include 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% include 'overall_footer.html' %}
