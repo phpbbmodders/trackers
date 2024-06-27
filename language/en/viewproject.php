@@ -59,7 +59,4 @@ $lang = array_merge($lang, [
 		1	=> '1 ticket',
 		2	=> '%d tickets',
 	],
-
-	'UNASSIGNED'	=> 'Unassigned',
-	'UNKNOWN'		=> 'Unknown',
 ]);

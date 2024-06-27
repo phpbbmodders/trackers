@@ -42,7 +42,9 @@ $lang = array_merge($lang, [
 
 	'TRACKERS'	=> 'Trackers',
 
+	'UNASSIGNED'	=> 'Unassigned',
 	'UNCATEGORISED'	=> 'Uncategorised',
+	'UNKNOWN'		=> 'Unknown',
 
 	'VIEWING_TRACKERS'	=> 'Viewing trackers',
 
