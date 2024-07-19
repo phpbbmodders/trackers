@@ -708,6 +708,7 @@ class m2_initial_data extends \phpbb\db\migration\migration
 			[
 				'tracker_id'			=> 1,
 				'tracker_name'			=> 'INCIDENT_TRACKER',
+				'tracker_icon'			=> 'life-ring',
 				'tracker_email'			=> '',
 				'tracker_visibility'	=> 1,
 				'tracker_status'		=> 1,
@@ -716,6 +717,7 @@ class m2_initial_data extends \phpbb\db\migration\migration
 			[
 				'tracker_id'			=> 2,
 				'tracker_name'			=> 'SECURITY_TRACKER',
+				'tracker_icon'			=> 'shield',
 				'tracker_email'			=> '',
 				'tracker_visibility'	=> 1,
 				'tracker_status'		=> 1,
@@ -724,6 +726,7 @@ class m2_initial_data extends \phpbb\db\migration\migration
 			[
 				'tracker_id'			=> 3,
 				'tracker_name'			=> 'BUG_TRACKER',
+				'tracker_icon'			=> 'bug',
 				'tracker_email'			=> '',
 				'tracker_visibility'	=> 0,
 				'tracker_status'		=> 1,
@@ -732,6 +735,7 @@ class m2_initial_data extends \phpbb\db\migration\migration
 			[
 				'tracker_id'			=> 4,
 				'tracker_name'			=> 'FEATURE_TRACKER',
+				'tracker_icon'			=> 'gift',
 				'tracker_email'			=> '',
 				'tracker_visibility'	=> 0,
 				'tracker_status'		=> 1,

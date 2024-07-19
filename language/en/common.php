@@ -93,8 +93,8 @@ $lang = array_merge($lang, [
 	'WILL_NOT_FIX_EXPLAIN'		=> 'A developer has reviewed your report and determined the issue to be nonessential. A patch will not be provided at this time. If you believe the issue to be critical, please reply to the report with a concise argument. If you have a working patch, now is an excellent time to provide it. Further information may be available in a response to your report.',
 
 	// Trackers
-	'BUG_TRACKER'		=> 'Bug tracker',
-	'FEATURE_TRACKER'	=> 'Feature tracker',
-	'INCIDENT_TRACKER'	=> 'Incident tracker',
-	'SECURITY_TRACKER'	=> 'Security tracker',
+	'BUG_TRACKER'		=> 'Bug Tracker',
+	'FEATURE_TRACKER'	=> 'Feature Tracker',
+	'INCIDENT_TRACKER'	=> 'Incident Tracker',
+	'SECURITY_TRACKER'	=> 'Security Tracker',
 ]);

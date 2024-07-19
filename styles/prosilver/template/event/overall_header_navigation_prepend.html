@@ -1,7 +1,7 @@
 {% if trackers %}
 <li id="trackers" class="dropdown-container responsive-menu" data-last-responsive="true">
 	<a href="#" class="dropdown-trigger">
-		<i class="icon fa-bars fa-fw" aria-hidden="true"></i><span>{{ lang('TRACKERS') }}</span>
+		<i class="icon fa-files-o fa-fw" aria-hidden="true"></i><span>{{ lang('TRACKERS') }}</span>
 	</a>
 	<div class="dropdown">
 		<div class="pointer"><div class="pointer-inner"></div></div>
@@ -9,7 +9,7 @@
 			{% for tracker in trackers %}
 			<li>
 				<a href="{{ tracker.U_VIEWTRACKER }}" role="menuitem">
-					<i class="icon fa-file-o fa-fw icon-gray" aria-hidden="true"></i><span>{{ tracker.TRACKER_NAME }}</span>
+					<i class="icon fa-{{ tracker.TRACKER_ICON }} fa-fw" aria-hidden="true"></i><span>{{ tracker.TRACKER_NAME }}</span>
 				</a>
 			</li>
 			{% endfor %}

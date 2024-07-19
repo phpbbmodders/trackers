@@ -188,6 +188,7 @@ class m1_initial_schema extends \phpbb\db\migration\migration
 					'COLUMNS'		=> [
 						'tracker_id'			=> ['UINT', null, 'auto_increment'],
 						'tracker_name'			=> ['VCHAR:255', ''],
+						'tracker_icon'			=> ['VCHAR:50', ''],
 						'tracker_email'			=> ['VCHAR:255', ''],
 						'tracker_visibility'	=> ['BOOL', 0],
 						'tracker_status'		=> ['BOOL', 0],

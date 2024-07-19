@@ -93,13 +93,14 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function page_header()
 	{
-		$sql = 'SELECT tracker_id, tracker_name
+		$sql = 'SELECT tracker_id, tracker_name, tracker_icon
 			FROM ' . $this->table_prefix . 'trackers_trackers';
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$this->template->assign_block_vars('trackers', [
 				'TRACKER_NAME'	=> $this->language->lang($row['tracker_name']),
+				'TRACKER_ICON'	=> $row['tracker_icon'],
 				'U_VIEWTRACKER'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewtracker', 't' => (int) $row['tracker_id']]),
 			]);
 		}
