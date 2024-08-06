@@ -130,6 +130,33 @@ class main_listener implements EventSubscriberInterface
 
 		$permissions = [
 			'a_trackers_manage'	=> ['lang' => 'ACL_A_TRACKERS_MANAGE', 'cat' => 'trackers'],
+
+			'm_trackers_approve'	=> ['lang' => 'ACL_M_TRACKERS_APPROVE', 'cat' => 'trackers'],
+			'm_trackers_chgposter'	=> ['lang' => 'ACL_M_TRACKERS_CHGPOSTER', 'cat' => 'trackers'],
+			'm_trackers_delete'		=> ['lang' => 'ACL_M_TRACKERS_DELETE', 'cat' => 'trackers'],
+			'm_trackers_edit'		=> ['lang' => 'ACL_M_TRACKERS_EDIT', 'cat' => 'trackers'],
+			'm_trackers_info'		=> ['lang' => 'ACL_M_TRACKERS_INFO', 'cat' => 'trackers'],
+			'm_trackers_lock'		=> ['lang' => 'ACL_M_TRACKERS_LOCK', 'cat' => 'trackers'],
+			'm_trackers_merge'		=> ['lang' => 'ACL_M_TRACKERS_MERGE', 'cat' => 'trackers'],
+			'm_trackers_move'		=> ['lang' => 'ACL_M_TRACKERS_MOVE', 'cat' => 'trackers'],
+			'm_trackers_report'		=> ['lang' => 'ACL_M_TRACKERS_REPORT', 'cat' => 'trackers'],
+
+			'u_trackers_attach'			=> ['lang' => 'ACL_U_TRACKERS_ATTACH', 'cat' => 'trackers'],
+			'u_trackers_bbcode'			=> ['lang' => 'ACL_U_TRACKERS_BBCODE', 'cat' => 'trackers'],
+			'u_trackers_delete'			=> ['lang' => 'ACL_U_TRACKERS_DELETE', 'cat' => 'trackers'],
+			'u_trackers_download'		=> ['lang' => 'ACL_U_TRACKERS_DOWNLOAD', 'cat' => 'trackers'],
+			'u_trackers_edit'			=> ['lang' => 'ACL_U_TRACKERS_EDIT', 'cat' => 'trackers'],
+			'u_trackers_img'			=> ['lang' => 'ACL_U_TRACKERS_IMG', 'cat' => 'trackers'],
+			'u_trackers_list'			=> ['lang' => 'ACL_U_TRACKERS_LIST', 'cat' => 'trackers'],
+			'u_trackers_list_tickets'	=> ['lang' => 'ACL_U_TRACKERS_LIST_TICKETS', 'cat' => 'trackers'],
+			'u_trackers_noapprove'		=> ['lang' => 'ACL_U_TRACKERS_NOAPPROVE', 'cat' => 'trackers'],
+			'u_trackers_post'			=> ['lang' => 'ACL_U_TRACKERS_POST', 'cat' => 'trackers'],
+			'u_trackers_read'			=> ['lang' => 'ACL_U_TRACKERS_READ', 'cat' => 'trackers'],
+			'u_trackers_reply'			=> ['lang' => 'ACL_U_TRACKERS_REPLY', 'cat' => 'trackers'],
+			'u_trackers_report'			=> ['lang' => 'ACL_U_TRACKERS_REPORT', 'cat' => 'trackers'],
+			'u_trackers_search'			=> ['lang' => 'ACL_U_TRACKERS_SEARCH', 'cat' => 'trackers'],
+			'u_trackers_smilies'		=> ['lang' => 'ACL_U_TRACKERS_SMILIES', 'cat' => 'trackers'],
+			'u_trackers_subscribe'		=> ['lang' => 'ACL_U_TRACKERS_SUBSCRIBE', 'cat' => 'trackers'],
 		];
 
 		foreach ($permissions as $key => $value)

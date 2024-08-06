@@ -43,8 +43,39 @@ class m2_initial_data extends \phpbb\db\migration\migration
 			// Add permissions
 			['permission.add', ['a_trackers_manage']],
 
+			['permission.add', ['m_trackers_approve']],
+			['permission.add', ['m_trackers_chgposter']],
+			['permission.add', ['m_trackers_delete']],
+			['permission.add', ['m_trackers_edit']],
+			['permission.add', ['m_trackers_info']],
+			['permission.add', ['m_trackers_lock']],
+			['permission.add', ['m_trackers_merge']],
+			['permission.add', ['m_trackers_move']],
+			['permission.add', ['m_trackers_report']],
+
+			['permission.add', ['u_trackers_attach']],
+			['permission.add', ['u_trackers_bbcode']],
+			['permission.add', ['u_trackers_delete']],
+			['permission.add', ['u_trackers_download']],
+			['permission.add', ['u_trackers_edit']],
+			['permission.add', ['u_trackers_img']],
+			['permission.add', ['u_trackers_list']],
+			['permission.add', ['u_trackers_list_tickets']],
+			['permission.add', ['u_trackers_noapprove']],
+			['permission.add', ['u_trackers_post']],
+			['permission.add', ['u_trackers_read']],
+			['permission.add', ['u_trackers_reply']],
+			['permission.add', ['u_trackers_report']],
+			['permission.add', ['u_trackers_search']],
+			['permission.add', ['u_trackers_smilies']],
+			['permission.add', ['u_trackers_subscribe']],
+
 			// Set permissions
 			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_trackers_manage']],
+
+			['permission.permission_set', ['ROLE_MOD_FULL', ['m_trackers_approve', 'm_trackers_chgposter', 'm_trackers_delete', 'm_trackers_edit', 'm_trackers_info', 'm_trackers_lock', 'm_trackers_merge', 'm_trackers_move', 'm_trackers_report']]],
+
+			['permission.permission_set', ['ROLE_USER_FULL', ['u_trackers_attach', 'u_trackers_bbcode', 'u_trackers_delete', 'u_trackers_download', 'u_trackers_edit', 'u_trackers_img', 'u_trackers_list', 'u_trackers_list_tickets', 'u_trackers_noapprove', 'u_trackers_post', 'u_trackers_read', 'u_trackers_reply', 'u_trackers_report', 'u_trackers_search', 'u_trackers_smilies', 'u_trackers_subscribe']]],
 
 			// Call a custom callable function to perform more complex operations
 			['custom', [[$this, 'install_data']]],
