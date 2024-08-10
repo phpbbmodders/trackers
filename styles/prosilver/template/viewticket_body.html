@@ -1,0 +1,140 @@
+{% INCLUDECSS '@phpbbmodders_trackers/common.css' %}
+{% include 'overall_header.html' %}
+
+<div class="extras">
+	{% include 'ticket_sidebar.html' %}
+</div>
+
+<div class="main">
+	<h2>{{ TRACKER_NAME }}</h2>
+
+	<h3{% if S_CLOSED %} class="ticket-closed"{% endif %}>{{ TICKET_TITLE }} <span>({{ STATUS_NAME|lower }}{% if S_TICKET_LOCKED %}, {{ lang('LOCKED') }}{% endif %}{% if S_TICKET_PRIVATE %}, {{ lang('PRIVATE') }}{% endif %})</span></h3>
+
+	{% if STATUS_DESC %}
+	<div class="rules" style="text-align: center;">
+		<div class="inner">
+		{{ STATUS_DESC }}
+		</div>
+	</div>
+	{% endif %}
+
+	<div id="ticket-box" class="post bg2">
+		<div class="inner">
+
+		<div class="postbody" style="width: 100%;">
+			<div class="content">
+			{{ TICKET_DESC }}
+			</div>
+		</div>
+
+		</div>
+	</div>
+
+	<h3>{{ lang('TICKET_POSTS') }}</h3>
+	{% if ticket_posts %}
+	{% for postrow in ticket_posts %}
+		{% if postrow.S_TYPE == 'HISTORY' %}
+		<div id="history{{ postrow.ID }}" class="post" style="background-color: #FBFBFB;">
+			<div class="inner">
+				<div>
+				{{ postrow.TEXT }}<br /><br />
+				{{ lang('ACTION_BY') }} {{ postrow.USER }}{% if postrow.USER_RANK %} ({{ postrow.USER_RANK }}){% endif %} &raquo; {{ postrow.TIMESTAMP }}
+				</div>
+			</div>
+		</div>
+		{% else %}
+		<div id="post{{ postrow.ID }}" class="post {% if postrow.S_PRIVATE %}reported {% endif %}{% if postrow.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+			<div class="inner">
+
+			<div id="post_content{{ postrow.ID }}"{% if postrow.S_POST_HIDDEN %} style="display: none;"{% endif %}>
+
+			<div class="postbody" style="width: 100%;">
+				<ul class="post-buttons">
+					{% if postrow.U_EDIT %}
+					<li>
+						<a href="{{ postrow.U_EDIT }}" title="{{ lang('EDIT_POST') }}" class="button button-icon-only">
+							<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_EDIT') }}</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if postrow.U_DELETE %}
+					<li>
+						<a href="{{ postrow.U_DELETE }}" title="{{ lang('DELETE_POST') }}" class="button button-icon-only">
+							<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_DELETE') }}</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if postrow.U_REPORT %}
+					<li>
+						<a href="{{ postrow.U_REPORT }}" title="{{ lang('REPORT_POST') }}" class="button button-icon-only">
+							<i class="icon fa-exclamation fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_REPORT') }}</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if postrow.U_INFO %}
+					<li>
+						<a href="{{ postrow.U_INFO }}" title="{{ lang('INFORMATION') }}" class="button button-icon-only">
+							<i class="icon fa-info fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_INFORMATION') }}</span>
+						</a>
+					</li>
+					{% endif %}
+					{% if postrow.U_QUOTE %}
+					<li>
+						<a href="{{ postrow.U_QUOTE }}" title="{{ lang('REPLY_WITH_QUOTE') }}" class="button button-icon-only">
+							<i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_QUOTE') }}</span>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+
+				<p class="author">
+					{% if S_IS_BOT %}
+					<span><i class="icon fa-file fa-fw {% if postrow.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span></span>
+					{% else %}
+					<a class="unread" href="{{ postrow.U_MINI_POST }}" title="{{ postrow.MINI_POST }}">
+						<i class="icon fa-file fa-fw {% if postrow.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span>
+					</a>
+					{% endif %}
+					<span class="responsive-hide">{{ lang('POST_BY_AUTHOR') }} <strong>{{ postrow.POST_AUTHOR_FULL }}</strong> &raquo; </span><time datetime="{{ postrow.POST_DATE_RFC3339 }}">{{ postrow.POST_DATE }}</time>
+				</p>
+
+				<div class="content">{{ postrow.TEXT }}</div>
+			</div>
+
+			</div>
+
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+	{% else %}
+	<div class="post bg1">
+		<div class="inner">
+			<strong>{{ lang('NO_COMMENTS') }}</strong>
+		</div>
+	</div>
+	{% endif %}
+
+	<div class="action-bar bar-bottom">
+		{% if S_ALLOW_REPLIES or not S_CLOSED or S_PROJECT_TEAM %}
+		<a href="{{ U_POST_REPLY_TICKET }}" class="button" title="{% if S_TICKET_LOCKED %}{{ lang('TICKET_LOCKED') }}{% else %}{{ lang('POST_REPLY') }}{% endif %}">
+			{% if S_TICKET_LOCKED %}
+			<span>{{ lang('BUTTON_TICKET_LOCKED') }}</span> <i class="icon fa-lock fa-fw" aria-hidden="true"></i>
+			{% else %}
+			<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
+			{% endif %}
+		</a>
+		{% endif %}
+
+		<div class="pagination">
+			{{ TOTAL_POSTS }}
+			{% if pagination %}
+				{% include 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% include 'overall_footer.html' %}

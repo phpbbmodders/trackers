@@ -20,6 +20,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
@@ -44,6 +47,7 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Constructor
 	 *
+	 * @param \phpbb\auth\auth                   $auth
 	 * @param \phpbb\db\driver\driver_interface  $db
 	 * @param \phpbb\language\language           $language
 	 * @param \phpbb\controller\helper           $helper
@@ -52,8 +56,9 @@ class main_listener implements EventSubscriberInterface
 	 * @param string                             $php_ext
 	 * @param string                             $table_prefix
 	 */
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\controller\helper $helper, \phpbb\template\template $template, $root_path, $php_ext, $table_prefix)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\controller\helper $helper, \phpbb\template\template $template, $root_path, $php_ext, $table_prefix)
 	{
+		$this->auth = $auth;
 		$this->db = $db;
 		$this->language = $language;
 		$this->helper = $helper;
@@ -93,16 +98,19 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function page_header()
 	{
-		$sql = 'SELECT tracker_id, tracker_name, tracker_icon
-			FROM ' . $this->table_prefix . 'trackers_trackers';
-		$result = $this->db->sql_query($sql);
-		while ($row = $this->db->sql_fetchrow($result))
+		if ($this->auth->acl_get('u_trackers_list'))
 		{
-			$this->template->assign_block_vars('trackers', [
-				'TRACKER_NAME'	=> $this->language->lang($row['tracker_name']),
-				'TRACKER_ICON'	=> $row['tracker_icon'],
-				'U_VIEWTRACKER'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewtracker', 't' => (int) $row['tracker_id']]),
-			]);
+			$sql = 'SELECT tracker_id, tracker_name, tracker_icon
+				FROM ' . $this->table_prefix . 'trackers_trackers';
+			$result = $this->db->sql_query($sql);
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$this->template->assign_block_vars('trackers', [
+					'TRACKER_NAME'	=> $this->language->lang($row['tracker_name']),
+					'TRACKER_ICON'	=> $row['tracker_icon'],
+					'U_VIEWTRACKER'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewtracker', 't' => (int) $row['tracker_id']]),
+				]);
+			}
 		}
 	}
 

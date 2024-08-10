@@ -1,0 +1,103 @@
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('TICKET_DETAILS') }}</h3>
+		<ul class="menu">
+			{% for detail in ticket_details %}
+			<li><strong>{{ detail.NAME }}{{ lang('COLON') }}</strong> {{ detail.VALUE }}</li>
+			{% endfor %}
+		</ul>
+		</div>
+	</div>
+
+	{% if duplicates %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('DUPLICATES_TICKET') }}</h3>
+		<div class="duplicates">
+			<ul class="menu">
+				<li>
+					{% for duplicate in duplicates %}
+					<a href="{{ duplicate.U_VIEWTICKET }}" title="{{ duplicate.TITLE }}">#{{ duplicate.ID }}</a>{% if not duplicate.S_LAST_ROW %}, {% endif %}
+					{% endfor %}
+				</li>
+			</ul>
+		</div>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if duplicates_other %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('DUPLICATES_OTHER') }}{{ DUPLICATE_ID }}</h3>
+		<div class="duplicates_other">
+			<ul class="menu">
+				<li>
+				{% for duplicate_other in duplicates_other %}
+					<a href="{{ duplicate_other.U_VIEWTICKET }}" title="{{ duplicate_other.TITLE }}">#{{ duplicate_other.ID }}</a>{% if not duplicate_other.S_LAST_ROW %}, {% endif %}
+					{% endfor %}
+				</li>
+			</ul>
+		</div>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if ticket_options %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('TICKET_OPTIONS') }}</h3>
+		<ul class="menu">
+			{% for option in ticket_options %}
+			<li><a href="{{ option.U_OPTION }}">{{ option.OPTION }}</a></li>
+			{% endfor %}
+		</ul>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if S_PROJECT_TEAM %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('CHANGE_STATUS') }}</h3>
+
+		<div class="status">
+			<form action="{{ U_VIEWTICKET }}" method="post">
+				<fieldset>
+					<select id="status_id" name="status_id">
+						{% for status in statuses %}
+						<option value="{{ status.ID }}"{% if status.ID == STATUS_ID %} selected="selected"{% endif %}>{{ status.NAME }}</option>
+						{% endfor %}
+					</select>
+					{{ S_FORM_TOKEN }}
+					<input type="submit" name="change_status" value="OK" class="button2" />
+				</fieldset>
+			</form>
+		</div>
+
+		</div>
+	</div>
+	{% endif %}
+
+	{% if S_ALLOW_SET_SEVERITY %}
+	<div class="mini-panel">
+		<div class="inner">
+		<h3>{{ lang('CHANGE_SEVERITY') }}</h3>
+
+		<div class="status">
+			<form action="{{ U_VIEWTICKET }}" method="post">
+				<fieldset>
+					<select id="severity_id" name="severity_id">
+						{% for severity in severities %}
+						<option value="{{ severity.ID }}"{% if severity.ID == SEVERITY_ID %} selected="selected"{% endif %}>{{ severity.NAME }}</option>
+						{% endfor %}
+					</select>
+					{{ S_FORM_TOKEN }}
+					<input type="submit" name="change_severity" value="OK" class="button2" />
+				</fieldset>
+			</form>
+		</div>
+
+		</div>
+	</div>
+	{% endif %}

@@ -50,6 +50,10 @@ class main_controller
 				return $this->container->get('phpbbmodders.trackers.viewproject')->display();
 			break;
 
+			case 'viewticket':
+				return $this->container->get('phpbbmodders.trackers.viewticket')->display();
+			break;
+
 			default:
 				throw new \phpbb\exception\http_exception(404, $this->language->lang('NO_PAGE_MODE'));
 			break;

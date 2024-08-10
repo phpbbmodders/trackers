@@ -21,6 +21,9 @@ services:
     phpbbmodders.trackers.project:
         class: phpbbmodders\trackers\includes\project
 
+    phpbbmodders.trackers.ticket:
+        class: phpbbmodders\trackers\includes\ticket
+
     phpbbmodders.trackers.tracker:
         class: phpbbmodders\trackers\includes\tracker
 
@@ -32,3 +35,6 @@ services:
 
     phpbbmodders.trackers.viewproject:
         class: phpbbmodders\trackers\operators\viewproject
+
+    phpbbmodders.trackers.viewticket:
+        class: phpbbmodders\trackers\operators\viewticket
