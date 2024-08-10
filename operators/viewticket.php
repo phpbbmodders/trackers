@@ -11,7 +11,6 @@
 namespace phpbbmodders\trackers\operators;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use phpbbmodders\trackers\constants;
 
 /**
  * Trackers
