@@ -74,7 +74,7 @@ class functions
 	 */
 	public function can_set_severity()
 	{
-		if ($this->project->is_team_user() || $this->auth->acl_get('m_'))
+		if ($this->auth->acl_getf_global('m_'))
 		{
 			return true;
 		}
@@ -90,7 +90,7 @@ class functions
 		$tickets = [];
 
 		$sql = 'SELECT t.ticket_id, t.ticket_title
-			FROM ' . $this->table_prefix . 'trackers_ticketS t
+			FROM ' . $this->table_prefix . 'trackers_tickets t
 			LEFT JOIN ' . $this->table_prefix . 'trackers_status st
 				ON (st.status_id = t.status_id)
 			WHERE st.ticket_duplicate = 1

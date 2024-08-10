@@ -333,7 +333,7 @@ class viewticket
 
 				$this->template->assign_block_vars('ticket_posts', [
 					'S_TYPE'	=> 'POST',
-					'S_EDIT'	=> ($project->is_team_user() || ($tracker->tracker_status && $post_data['user_id'] == $this->user->data['user_id'] && !$ticket->ticket_closed)),
+					'S_EDIT'	=> ($project->is_team_user() || ($tracker->tracker_status && $post_data['poster_id'] == $this->user->data['user_id'] && !$ticket->ticket_closed)),
 					'S_PRIVATE'	=> $post_data['post_visibility'],
 
 					'U_EDIT'	=> '',
@@ -341,7 +341,7 @@ class viewticket
 
 					'ID'		=> $post_data['post_id'],
 					'TEXT'		=> $post_text,
-					'USER'		=> get_username_string('full', $post_data['user_id'], $post_data['username'], $post_data['user_colour']),
+					'USER'		=> get_username_string('full', $post_data['poster_id'], $post_data['username'], $post_data['user_colour']),
 					'USER_RANK'	=> $post_data['rank_title'],
 					'TIMESTAMP'	=> $this->user->format_date($post_data['post_time']),
 				]);
@@ -355,7 +355,7 @@ class viewticket
 
 					'ID'		=> $history_data['history_id'],
 					'TEXT'		=> $history_data['history_text'],
-					'USER'		=> get_username_string('full', $history_data['user_id'], $history_data['username'], $history_data['user_colour']),
+					'USER'		=> get_username_string('full', $history_data['poster_id'], $history_data['username'], $history_data['user_colour']),
 					'USER_RANK'	=> $history_data['rank_title'],
 					'TIMESTAMP'	=> $this->user->format_date($history_data['history_timestamp']),
 				]);
@@ -369,7 +369,7 @@ class viewticket
 
 		// Assign global tpl variables
 		$this->template->assign_vars([
-			'S_ALLOW_SET_SEVERITY'	=> $this->functions->can_set_severity(),
+			'S_ALLOW_SET_SEVERITY'	=> $this->functions->can_set_severity() || $project->is_team_user(),
 			'S_CLOSED'				=> $ticket->ticket_closed,
 			'S_TICKET_PRIVATE'		=> $ticket->ticket_visibility,
 			'S_TICKET_OPTIONS'		=> (count($ticket_options) > 0) ? true : false,
