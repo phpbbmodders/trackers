@@ -44,6 +44,10 @@ div.mini-panel h3 {
 	margin: 5px 0 0;
 }
 
+h3.ticket-closed {
+	text-decoration: line-through;
+}
+
 /** Trackers */
 th {
 	text-align: left;
@@ -60,3 +64,16 @@ div.center, th.center, td.center {
 .action-bar.bar-bottom {
 	margin-top: 0;
 }
+
+.history {
+	background-color: #FBFBFB;
+}
+
+.ticket-buttons {
+	margin-top: 5px;
+}
+
+.comment {
+	margin-top: 3px;
+}
+

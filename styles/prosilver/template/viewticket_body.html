@@ -11,7 +11,7 @@
 	<h3{% if S_CLOSED %} class="ticket-closed"{% endif %}>{{ TICKET_TITLE }} <span>({{ STATUS_NAME|lower }}{% if S_TICKET_LOCKED %}, {{ lang('LOCKED') }}{% endif %}{% if S_TICKET_PRIVATE %}, {{ lang('PRIVATE') }}{% endif %})</span></h3>
 
 	{% if STATUS_DESC %}
-	<div class="rules" style="text-align: center;">
+	<div class="rules center">
 		<div class="inner">
 		{{ STATUS_DESC }}
 		</div>
@@ -21,7 +21,7 @@
 	<div id="ticket-box" class="post bg2">
 		<div class="inner">
 
-		<div class="postbody" style="width: 100%;">
+		<div class="postbody wide">
 			<div class="content">
 			{{ TICKET_DESC }}
 			</div>
@@ -34,12 +34,12 @@
 	{% if ticket_posts %}
 	{% for postrow in ticket_posts %}
 		{% if postrow.S_TYPE == 'HISTORY' %}
-		<div id="history{{ postrow.ID }}" class="post" style="background-color: #FBFBFB;">
+		<div id="history{{ postrow.ID }}" class="post history">
 			<div class="inner">
-				<div>
+				<div><p>
 				{{ postrow.TEXT }}<br /><br />
-				{{ lang('ACTION_BY') }} {{ postrow.USER }}{% if postrow.USER_RANK %} ({{ postrow.USER_RANK }}){% endif %} &raquo; {{ postrow.TIMESTAMP }}
-				</div>
+				{{ lang('ACTION_BY') }} {{ postrow.POST_AUTHOR_FULL }}{% if postrow.USER_RANK %} ({{ postrow.USER_RANK }}){% endif %} &raquo; </span><time datetime="{{ postrow.POST_DATE_RFC3339 }}">{{ postrow.POST_DATE }}</time>
+				</p></div>
 			</div>
 		</div>
 		{% else %}
@@ -48,8 +48,8 @@
 
 			<div id="post_content{{ postrow.ID }}"{% if postrow.S_POST_HIDDEN %} style="display: none;"{% endif %}>
 
-			<div class="postbody" style="width: 100%;">
-				<ul class="post-buttons">
+			<div class="postbody wide">
+				<ul class="post-buttons ticket-buttons">
 					{% if postrow.U_EDIT %}
 					<li>
 						<a href="{{ postrow.U_EDIT }}" title="{{ lang('EDIT_POST') }}" class="button button-icon-only">
@@ -61,13 +61,6 @@
 					<li>
 						<a href="{{ postrow.U_DELETE }}" title="{{ lang('DELETE_POST') }}" class="button button-icon-only">
 							<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_DELETE') }}</span>
-						</a>
-					</li>
-					{% endif %}
-					{% if postrow.U_REPORT %}
-					<li>
-						<a href="{{ postrow.U_REPORT }}" title="{{ lang('REPORT_POST') }}" class="button button-icon-only">
-							<i class="icon fa-exclamation fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BUTTON_REPORT') }}</span>
 						</a>
 					</li>
 					{% endif %}
@@ -87,12 +80,12 @@
 					{% endif %}
 				</ul>
 
-				<p class="author">
+				<p class="comment">
 					{% if S_IS_BOT %}
-					<span><i class="icon fa-file fa-fw {% if postrow.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span></span>
+					<span><i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span></span>
 					{% else %}
 					<a class="unread" href="{{ postrow.U_MINI_POST }}" title="{{ postrow.MINI_POST }}">
-						<i class="icon fa-file fa-fw {% if postrow.S_UNREAD_POST %}icon-red{% else %}icon-lightgray{% endif %} icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span>
+						<i class="icon fa-file fa-fw icon-lightgray icon-md" aria-hidden="true"></i><span class="sr-only">{{ postrow.MINI_POST }}</span>
 					</a>
 					{% endif %}
 					<span class="responsive-hide">{{ lang('POST_BY_AUTHOR') }} <strong>{{ postrow.POST_AUTHOR_FULL }}</strong> &raquo; </span><time datetime="{{ postrow.POST_DATE_RFC3339 }}">{{ postrow.POST_DATE }}</time>
@@ -116,7 +109,7 @@
 	{% endif %}
 
 	<div class="action-bar bar-bottom">
-		{% if S_ALLOW_REPLIES or not S_CLOSED or S_PROJECT_TEAM %}
+		{% if S_POST_REPLY or not S_CLOSED or S_PROJECT_TEAM %}
 		<a href="{{ U_POST_REPLY_TICKET }}" class="button" title="{% if S_TICKET_LOCKED %}{{ lang('TICKET_LOCKED') }}{% else %}{{ lang('POST_REPLY') }}{% endif %}">
 			{% if S_TICKET_LOCKED %}
 			<span>{{ lang('BUTTON_TICKET_LOCKED') }}</span> <i class="icon fa-lock fa-fw" aria-hidden="true"></i>
@@ -124,6 +117,24 @@
 			<span>{{ lang('BUTTON_POST_REPLY') }}</span> <i class="icon fa-reply fa-fw" aria-hidden="true"></i>
 			{% endif %}
 		</a>
+		{% endif %}
+
+		{% if quickmod %}
+		<div class="quickmod dropdown-container dropdown-container-left dropdown-up dropdown-button-control" id="quickmod">
+			<span title="{{ lang('QUICK_MOD') }}" class="button button-secondary dropdown-trigger dropdown-select">
+				<i class="icon fa-gavel fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('QUICK_MOD') }}</span>
+				<span class="caret"><i class="icon fa-sort-down fa-fw" aria-hidden="true"></i></span>
+			</span>
+			<div class="dropdown">
+				<div class="pointer"><div class="pointer-inner"></div></div>
+				<ul class="dropdown-contents">
+				{% for option in quickmod %}
+					{% DEFINE QUICKMOD_AJAX = (option.VALUE in ['lock', 'unlock', 'delete_ticket', 'set_reviewed', 'assign_me', 'assign_my_group']) %}
+					<li><a href="{{ option.LINK }}"{% if definition.QUICKMOD_AJAX %} data-ajax="true" data-refresh="true"{% endif %}>{{ option.TITLE }}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
 		{% endif %}
 
 		<div class="pagination">

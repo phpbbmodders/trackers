@@ -65,7 +65,7 @@ class ticket
 	{
 		$sql = 'SELECT t.*, st.status_name, st.ticket_closed, st.ticket_duplicate, sv.severity_name, c.component_name,
 				r.username AS ticket_user, r.user_colour AS ticket_colour,
-				au.username AS assigned_user_name, au.user_colour AS assigned_user_colour,
+				au.user_id AS assigned_user_id, au.username AS assigned_username, au.user_colour AS assigned_user_colour,
 				ag.group_id AS assigned_group_id, ag.group_name AS assigned_group_name, ag.group_colour AS assigned_group_colour
 			FROM (' . $this->table_prefix . 'trackers_tickets t, ' . $this->table_prefix . 'users r)
 			LEFT JOIN ' . $this->table_prefix . 'trackers_status st

@@ -20,6 +20,9 @@ class viewticket
 	/** @var ContainerInterface */
 	protected $container;
 
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -54,6 +57,7 @@ class viewticket
 	 * Constructor
 	 *
 	 * @param ContainerInterface                 $container
+	 * @param \phpbb\auth\auth                   $auth
 	 * @param \phpbb\config\config               $config
 	 * @param \phpbb\db\driver\driver_interface  $db
 	 * @param \phpbb\language\language           $language
@@ -65,9 +69,10 @@ class viewticket
 	 * @param string                             $php_ext
 	 * @param string                             $table_prefix
 	 */
-	public function __construct(ContainerInterface $container, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $root_path, $php_ext, $table_prefix)
+	public function __construct(ContainerInterface $container, \phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\controller\helper $helper, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, $root_path, $php_ext, $table_prefix)
 	{
 		$this->container = $container;
+		$this->auth = $auth;
 		$this->config = $config;
 		$this->db = $db;
 		$this->language = $language;
@@ -101,6 +106,7 @@ class viewticket
 		$pagination = $this->container->get('pagination');
 
 		$start = $this->request->variable('start', 0);
+		$group_helper = $this->container->get('group_helper');
 
 		if (!$ticket || !$ticket->has_access())
 		{
@@ -136,15 +142,14 @@ class viewticket
 
 		if (!empty($ticket->assigned_username))
 		{
-			$assigned_to = get_username_string('full', $$ticket->assigned_user_id, $ticket->assigned_username, $ticket->assigned_user_colour);
+			$assigned_to = get_username_string('full', $ticket->assigned_user_id, $ticket->assigned_username, $ticket->assigned_user_colour);
 		}
 		else if (!empty($ticket->assigned_group_name))
 		{
-			$group_helper = $this->container->get('group_helper');
 			$assigned_to = $group_helper->get_name_string('full', $ticket->assigned_group_id, $ticket->assigned_group_name, $ticket->assigned_group_colour);
 		}
 
-		$ticket_details[$this->language->lang('ASSIGNED')] = $assigned_to;
+		$ticket_details[$this->language->lang('ASSIGNED')] = $assigned_to === '' ? $this->language->lang('UNASSIGNED') : $assigned_to;
 
 		// Show reporter's IP address to help with log files
 		if (!empty($ticket->poster_ip) && $project->is_team_user())
@@ -172,7 +177,7 @@ class viewticket
 		{
 			$this->template->assign_block_vars('severities', [
 				'ID'	=> $tmp_severity_id,
-				'NAME'	=> $severity_data['severity_name'],
+				'NAME'	=> $this->language->lang($severity_data['severity_name']),
 			]);
 		}
 
@@ -233,10 +238,8 @@ class viewticket
 		$pagination->generate_template_pagination($base_url, 'pagination', 'start', $posts_total, $this->config['posts_per_page'], $start);
 
 		// Grab the posts
-		$sql = 'SELECT p.*, u.username, u.user_colour, r.rank_title
+		$sql = 'SELECT p.*, u.username, u.user_colour
 			FROM (' . $this->table_prefix . 'trackers_posts p, ' . $this->table_prefix . 'users u)
-			LEFT JOIN ' . $this->table_prefix . 'ranks r
-				ON r.rank_id = u.user_rank
 			WHERE p.poster_id = u.user_id
 				AND p.post_id <> ' . (int) $ticket->post_id . '
 				AND p.ticket_id = ' . (int) $ticket_id;
@@ -325,25 +328,51 @@ class viewticket
 
 			if (!$history_data || ($post_data && ($post_data['post_time'] < $history_data['history_timestamp'])))
 			{
+				$s_cannot_edit = !$this->auth->acl_get('u_trackers_edit') || $this->user->data['user_id'] != $post_data['poster_id'];
+				$s_cannot_edit_locked = $ticket->ticket_locked && !$this->auth->acl_get('m_trackers_lock');
+
+				$s_cannot_delete = $this->user->data['user_id'] != $post_data['poster_id'] || (
+					!$this->auth->acl_get('u_trackers_delete')
+				);
+				$s_cannot_delete_locked = $ticket->ticket_locked;
+
+				$edit_allowed = ($this->user->data['is_registered'] && ($this->auth->acl_get('m_trackers_edit') || (
+					!$s_cannot_edit &&
+					!$s_cannot_edit_locked
+				)));
+
+				$quote_allowed = $this->auth->acl_get('m_trackers_edit') || (!$ticket->ticket_locked &&
+					($this->user->data['user_id'] == ANONYMOUS || $this->auth->acl_get('u_trackers_reply'))
+				);
+
+				$delete_allowed = ($this->user->data['is_registered'] && (
+					$this->auth->acl_get('m_trackers_delete') ||
+					(!$s_cannot_delete && !$s_cannot_delete_locked)
+				));
+
 				$post_data['bbcode_options'] = (($post_data['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) +
 					(($post_data['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) +
 					(($post_data['enable_magic_url']) ? OPTION_FLAG_LINKS : 0);
 
-				$post_text = generate_text_for_display($post_data['post_text'], $post_data['bbcode_uid'], $post_data['bbcode_bitfield'], $post_data['bbcode_flags']);
+				$post_text = generate_text_for_display($post_data['post_text'], $post_data['bbcode_uid'], $post_data['bbcode_bitfield'], $post_data['bbcode_options']);
 
 				$this->template->assign_block_vars('ticket_posts', [
 					'S_TYPE'	=> 'POST',
-					'S_EDIT'	=> ($project->is_team_user() || ($tracker->tracker_status && $post_data['poster_id'] == $this->user->data['user_id'] && !$ticket->ticket_closed)),
 					'S_PRIVATE'	=> $post_data['post_visibility'],
 
-					'U_EDIT'	=> '',
-					'U_DELETE'	=> '',
+					'U_EDIT'	=> ($edit_allowed) ? $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'posting', 'mode' => 'edit', 'post' => (int) $post_data['post_id']]) : '',
+					'U_QUOTE'	=> ($quote_allowed) ? $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'posting', 'mode' => 'quote', 'post' => (int) $post_data['post_id']]) : '',
+					'U_INFO'	=> ($this->auth->acl_get('m_trackers_info')) ? $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'mcp', 'i' => 'main', 'mode' => 'post_details', 'post' => (int) $post_data['post_id']]) : '',
+					'U_DELETE'	=> ($delete_allowed) ? $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'posting', 'mode' => 'delete', 'post' => (int) $post_data['post_id']]) : '',
 
-					'ID'		=> $post_data['post_id'],
-					'TEXT'		=> $post_text,
-					'USER'		=> get_username_string('full', $post_data['poster_id'], $post_data['username'], $post_data['user_colour']),
-					'USER_RANK'	=> $post_data['rank_title'],
-					'TIMESTAMP'	=> $this->user->format_date($post_data['post_time']),
+					'U_MINI_POST'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewticket', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id, 'post' => (int) $post_data['post_id']]),
+
+					'ID'				=> $post_data['post_id'],
+					'TEXT'				=> $post_text,
+					'POST_AUTHOR_FULL'	=> get_username_string('full', $post_data['poster_id'], $post_data['username'], $post_data['user_colour']),
+					'POST_DATE'			=> $this->user->format_date($post_data['post_time']),
+					'POST_DATE_RFC3339'	=> gmdate(DATE_RFC3339, $post_data['post_time']),
+					'MINI_POST'			=> $this->language->lang('POST'),
 				]);
 
 				$post_data = false;
@@ -353,11 +382,12 @@ class viewticket
 				$this->template->assign_block_vars('ticket_posts', [
 					'S_TYPE'	=> 'HISTORY',
 
-					'ID'		=> $history_data['history_id'],
-					'TEXT'		=> $history_data['history_text'],
-					'USER'		=> get_username_string('full', $history_data['poster_id'], $history_data['username'], $history_data['user_colour']),
-					'USER_RANK'	=> $history_data['rank_title'],
-					'TIMESTAMP'	=> $this->user->format_date($history_data['history_timestamp']),
+					'ID'				=> $history_data['history_id'],
+					'TEXT'				=> $history_data['history_text'],
+					'POST_AUTHOR_FULL'	=> get_username_string('full', $history_data['poster_id'], $history_data['username'], $history_data['user_colour']),
+					'USER_RANK'			=> $history_data['rank_title'],
+					'POST_DATE'			=> $this->user->format_date($history_data['history_timestamp']),
+					'POST_DATE_RFC3339'	=> gmdate(DATE_RFC3339, $history_data['history_timestamp']),
 				]);
 
 				$history_data = false;
@@ -365,7 +395,40 @@ class viewticket
 		}
 
 		// TODO - ticket options (set status, set severity, etc)
+		$viewticket_url = $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewticket', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id]);
+
+		$s_quickmod_action = $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'mcp', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id, 'start' => $start, 'quickmod' => 1, 'redirect' => urlencode(str_replace('&amp;', '&', $viewticket_url))]);
+
 		$ticket_options = [];
+
+		$sql = 'SELECT group_name
+			FROM ' . $this->table_prefix . 'groups
+			WHERE group_id = ' . (int) $this->user->data['group_id'];
+		$result = $this->db->sql_query($sql, 3600);
+		$group_data = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		$ticket_options = [
+			'lock'				=> ['LOCK_TICKET', !$ticket->ticket_locked && $this->auth->acl_get('m_trackers_lock')],
+			'unlock'			=> ['UNLOCK_TICKET', $ticket->ticket_locked && $this->auth->acl_get('m_trackers_lock')],
+			'delete_ticket'		=> ['DELETE_TICKET', $this->auth->acl_get('m_trackers_delete')],
+			'move'				=> ['MOVE_TICKET', $this->auth->acl_get('m_trackers_move')],
+			'set_reviewed'		=> ['SET_REVIEWED', $project->is_team_user()],
+			'change_status'		=> ['CHANGE_STATUS', $project->is_team_user()],
+			'change_severity'	=> ['CHANGE_SEVERITY', $project->is_team_user()],
+			'assign'			=> ['ASSIGN', $project->is_team_user()],
+			'assign_me'			=> ['ASSIGN_ME', ($ticket->assigned_user != (int) $this->user->data['user_id']) && $project->is_team_user()],
+			// This option only checks primary group
+			'assign_my_group'	=> [$this->language->lang('ASSIGN_MY_GROUP', $group_helper->get_name_string('group_name', (int) $this->user->data['group_id'], $group_data['group_name'])), ($ticket->assigned_group != $this->user->data['group_id'] && $project->is_team_group($this->user->data['group_id'])) && $project->is_team_user()],
+		];
+
+		foreach ($ticket_options as $option => $qm_ary)
+		{
+			if (!empty($qm_ary[1]))
+			{
+				phpbb_add_quickmod_option($s_quickmod_action, $option, $qm_ary[0]);
+			}
+		}
 
 		// Assign global tpl variables
 		$this->template->assign_vars([
@@ -375,8 +438,11 @@ class viewticket
 			'S_TICKET_OPTIONS'		=> (count($ticket_options) > 0) ? true : false,
 			'S_TICKET_FIXED'		=> (!empty($statuses[$ticket->status_id]['ticket_fixed'])) ? true : false,
 			'S_TICKET_LOCKED'		=> $ticket->ticket_locked,
+			'S_PROJECT_TEAM'		=> $project->is_team_user(),
+			'S_POST_REPLY'			=> $tracker->tracker_status && $this->auth->acl_get('u_trackers_reply') ? true : false,
 
-			'U_VIEWTICKET'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewticket', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id]),
+			'U_POST_REPLY_TICKET'	=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'posting', 'mode' => 'reply', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id]),
+			'U_VIEWTICKET'			=> $this->helper->route('phpbbmodders_trackers_controller', ['page' => 'viewticket', 't' => (int) $tracker_id, 'p' => (int) $project_id, 'ticket' => (int) $ticket_id]),
 
 			'TICKET_ID'		=> $ticket->ticket_id,
 			'STATUS_ID'		=> $ticket->status_id,

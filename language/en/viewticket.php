@@ -35,8 +35,11 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, [
-	'ACTION_BY'	=> 'Action performed by',
-	'ASSIGNED'	=> 'Assigned to',
+	'ACTION_BY'			=> 'Action performed by',
+	'ASSIGN'			=> 'Assign to another user/group',
+	'ASSIGN_ME'			=> 'Assign to me',
+	'ASSIGN_MY_GROUP'	=> 'Assign to %1$s',
+	'ASSIGNED'			=> 'Assigned to',
 
 	'BUTTON_DELETE'         => 'Delete',
 	'BUTTON_EDIT'			=> 'Edit',
@@ -46,16 +49,21 @@ $lang = array_merge($lang, [
 	'BUTTON_REPORT'         => 'Report',
 	'BUTTON_TICKET_LOCKED'	=> 'Locked',
 
-	'CHANGE_SEVERITY'	=> 'Change ticket severity',
-	'CHANGE_STATUS'		=> 'Change ticket status',
+	'CHANGE_SEVERITY'	=> 'Change severity',
+	'CHANGE_STATUS'		=> 'Change status',
 
 	'DELETE_POST'		=> 'Delete post',
+	'DELETE_TICKET'		=> 'Delete ticket',
 	'DUPLICATES_OTHER'	=> 'Duplicates of #',
 	'DUPLICATES_TICKET'	=> 'Duplicates of this ticket',
 
 	'EDIT_POST'	=> 'Edit post',
 
 	'INFORMATION'	=> 'Information',
+
+	'LOCK_TICKET'	=> 'Lock ticket',
+
+	'MOVE_TICKET'	=> 'Move ticket',
 
 	'NO_TICKET'		=> 'This specified ticket does not exist',
 	'NO_COMMENTS'	=> 'No comments have been made and there are no history entries.',
@@ -64,6 +72,8 @@ $lang = array_merge($lang, [
 	'POST_REPLY'		=> 'Post a reply',
 	'PROJECT'			=> 'Project',
 
+	'QUICK_MOD'	=> 'Quick-mod tools',
+
 	'REPLY_WITH_QUOTE'	=> 'Reply with quote',
 	'REPORT_POST'		=> 'Report this post',
 	'REPORTED_BY'		=> 'Reported by',
@@ -71,6 +81,7 @@ $lang = array_merge($lang, [
 	'REPORTED_ON'		=> 'Reported on',
 
 	'SEND_PM'		=> 'Send PM',
+	'SET_REVIEWED'	=> 'Set to "Reviewed"',
 	'STATUS'		=> 'Status',
 	'STATUS_DESC'	=> '<strong>Your ticket\'s status is "%1$s"</strong><br /><br />%2$s',
 
@@ -84,4 +95,6 @@ $lang = array_merge($lang, [
 		1	=> '1 post',
 		2	=> '%d posts',
 	],
+
+	'UNLOCK_TICKET'	=> 'Unlock ticket',
 ]);
