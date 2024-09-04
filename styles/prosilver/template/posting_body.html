@@ -1,0 +1,190 @@
+{% INCLUDECSS '@phpbbmodders_trackers/common.css' %}
+{% include 'overall_header.html' %}
+
+<div class="main wide">
+	<h2>{{ TRACKER_NAME }}</h2>
+
+	{% if not S_EDIT %}
+	<p>{{ lang('ADD_TICKET_EXPLAIN') }}</p>
+
+		{% if PROJECT_NOTE %}
+		<div class="rules center">
+			<div class="inner">
+			{{ PROJECT_NOTE }}
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+
+	{% if PREVIEW %}
+	<h3>{{ lang('PREVIEW') }}</h3>
+	<div class="panel bg2">
+		<div class="inner">
+		<div class="ticket-body">{{ PREVIEW }}</div>
+		</div>
+	</div>
+	{% if not S_EDIT %}<h3>{{ lang('SUBMIT_TICKET') }}</h3>{% endif %}
+	{% endif %}
+
+	{% if S_EDIT %}<h3{% if S_CLOSED %} class="ticket-closed"{% endif %}>{{ lang('EDIT_TICKET') }} #{{ TICKET_ID }}{{ lang('COLON') }} {{ TICKET_PAGE_TITLE }} <span>({{ STATUS_NAME|lower }}{% if S_TICKET_LOCKED %}, {{ lang('LOCKED') }}{% endif %}{% if S_TICKET_PRIVATE %}, {{ lang('PRIVATE') }}{% endif %})</span></h3>{% endif %}
+	<form action="{{ U_SUBMIT }}" method="post" enctype="multipart/form-data">
+		<div class="panel bg2">
+			<div class="inner">
+			<fieldset>
+				<h3>{{ lang('PROJECT_INFO') }}</h3>
+				{% if S_NO_COMPONENT %}
+				<p class="error">
+					{{ lang('SELECT_COMPONENT') }}
+				</p>
+				{% endif %}
+				<dl>
+					<dt>{{ lang('TRACKER') ~ lang('COLON') }}</dt>
+					<dd>{{ TRACKER_NAME }}</dd>
+				</dl>
+				<dl>
+					<dt>{{ lang('PROJECT') ~ lang('COLON') }}</dt>
+					<dd>{{ PROJECT_NAME }}</dd>
+				</dl>
+				{% if S_EDIT and S_PROJECT_TEAM %}
+				<dl>
+					<dt><label for="project_id">{{ lang('MOVE_TICKET') ~ lang('COLON') }}</label></dt>
+					<dd><a href="{{ U_MOVE }}">{{ lang('MOVE_LINK') }}</a></dd>
+				</dl>
+				{% endif %}
+
+				{% if S_HAS_COMPONENTS %}
+				<dl>
+					<dt><label for="component_id">{{ lang('COMPONENT') ~ lang('COLON') }}</label></dt>
+					<dd>
+						<select id="component_id" name="component_id">
+							<option value="0">({{ lang('UNKNOWN')|lower }})</option>
+							{% for component in components %}
+							<option value="{{ component.ID }}"{% if component.ID == COMPONENT_ID %} selected="selected"{% endif %}>{{ component.NAME }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				{% endif %}
+			</fieldset>
+			</div>
+		</div>
+
+		{% if S_EDIT and S_PROJECT_TEAM %}
+		<div class="panel bg2">
+			<div class="inner">
+			<fieldset>
+				<h3>{{ lang('ASSIGNEE') }}</h3>
+				<dl>
+					<dt><label for="assigned_user">{{ lang('USERNAME') ~ lang('COLON') }}</label></dt>
+					<dd>
+						<select id="assigned_user" name="assigned_user"{% if S_HAS_GROUPS %} onchange="document.getElementById('assigned_group').disabled = (this.options[this.selectedIndex].value != 0)"{% endif %}>
+							<option value="0">({{ lang('UNASSIGNED')|lower }})</option>
+							{% for user in users %}
+							<option value="{{ user.ID }}"{% if ASSIGNED_USER == user.ID %} selected="selected"{% endif %}>{{ user.NAME }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				{% if S_HAS_GROUPS %}
+				<dl>
+					<dt><label for="assigned_group">{{ lang('USERGROUP') ~ lang('COLON') }}</label></dt>
+					<dd>
+						<select id="assigned_group" name="assigned_group" onchange="document.getElementById('assigned_user').disabled = (this.options[this.selectedIndex].value != 0)">
+							<option value="0">({{ lang('UNASSIGNED')|lower }})</option>
+							{% for group in groups %}
+							<option value="{{ group.ID }}"{% if ASSIGNED_GROUP == group.ID %} selected="selected"{% endif %}>{{ group.NAME }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				<script type="text/javascript">
+				// <![CDATA[
+					var assigned_user = document.getElementById('assigned_user');
+					var assigned_group = document.getElementById('assigned_group');
+
+					assigned_user.disabled = (assigned_group.options[assigned_group.selectedIndex].value != 0);
+					assigned_group.disabled = (assigned_user.options[assigned_user.selectedIndex].value != 0);
+				// ]]>
+				</script>
+				{% endif %}
+			</fieldset>
+			</div>
+		</div>
+		{% endif %}
+
+		<div class="panel bg2">
+			<div class="inner">
+			<fieldset>
+				<h3>{{ lang('TICKET') }}</h3>
+				{% if S_NO_TITLE or S_NO_DESCRIPTION %}
+				<p class="error">
+					{% if S_NO_TITLE %}{{ lang('NO_TITLE') }}{% endif %}
+					{% if S_NO_DESCRIPTION %}{{ lang('NO_DESCRIPTION') }}{% endif %}
+				</p>
+				{% endif %}
+
+				{% if S_EDIT and S_PROJECT_TEAM %}
+				<dl>
+					<dt class="bold">{{ lang('REPORTED_BY') ~ lang('COLON') }}</dt>
+					<dd><strong>{{ REPORTER_NAME }}</strong></dd>
+				</dl>
+				<dl>
+					<dt><label for="status_id">{{ lang('STATUS') ~ lang('COLON') }}</label></dt>
+					<dd>
+						<select id="status_id" name="status_id">
+							{% for status in statuses %}
+							<option value="{{ status.ID }}"{% if status.ID == STATUS_ID %} selected="selected"{% endif %}>{{ status.NAME }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				{% endif %}
+				{% if S_ALLOW_SET_SEVERITY and S_HAS_SEVERITIES %}
+				<dl>
+					<dt><label for="severity_id">{{ lang('SEVERITY') }}</label></dt>
+					<dd>
+						<select id="severity_id" name="severity_id">
+							{% for severity in severities %}
+							<option value="{{ severity.ID }}"{% if severity.ID == SEVERITY_ID %} selected="selected"{% endif %}>{{ severity.NAME }}</option>
+							{% endfor %}
+						</select>
+					</dd>
+				</dl>
+				{% endif %}
+				<dl>
+					<dt><label for="ticket_title">{{ lang('TITLE') ~ lang('COLON') }}</label><br /><span>{{ lang('TITLE_EXPLAIN') }}</span></dt>
+					<dd><input type="text" id="ticket_title" name="ticket_title" value="{{ TICKET_TITLE }}" class="inputbox medium" /></dd>
+				</dl>
+				<dl>
+					<dt><label for="ticket_description">{{ lang('DESCRIPTION') ~ lang('COLON') }}</label><br /><span>{{ lang('DESCRIPTION_EXPLAIN') }}</span></dt>
+					<dd><textarea id="ticket_description" name="ticket_description" rows="10" cols="20" class="inputbox">{{ TICKET_DESCRIPTION }}</textarea></dd>
+				</dl>
+				{% if S_CAN_REPORT_PRIVATE %}
+				<dl>
+					<dt><label for="ticket_private">{{ lang('PRIVATE_TICKET') ~ lang('COLON') }}</label></dt>
+					<dd><input id="ticket_private" type="checkbox" name="ticket_private"{% if S_TICKET_PRIVATE %} checked="checked"{% endif %} /></dd>
+				</dl>
+				{% endif %}
+				{% if S_EDIT and S_PROJECT_TEAM %}
+				<dl>
+					<dt><label for="ticket_locked">{{ lang('LOCK_TICKET') ~ lang('COLON') }}</label></dt>
+					<dd><input id="ticket_locked" type="checkbox" name="ticket_locked" value="1"{% if S_TICKET_LOCKED %} checked="checked"{% endif %} /></dd>
+				</dl>
+				{% endif %}
+			</fieldset>
+			</div>
+		</div>
+
+		<div class="panel bg2">
+			<div class="inner">
+			<fieldset class="submit-buttons">
+				{{ S_HIDDEN_FIELDS }}
+				<input type="submit" tabindex="5" name="preview" value="{{ lang('PREVIEW') }}" class="button1" />&nbsp;
+				<input type="submit" accesskey="s" tabindex="6" name="post" value="{{ lang('SUBMIT') }}" class="button1 default-submit-action" />&nbsp;
+			</fieldset>
+			</div>
+		</div>
+	</form>
+</div>
+
+{% include 'overall_footer.html' %}

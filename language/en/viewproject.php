@@ -51,9 +51,6 @@ $lang = array_merge($lang, [
 
 	'POST_TICKET'	=> 'Post a new ticket',
 
-	'STATUS'	=> 'Status',
-
-	'TITLE'			=> 'Title',
 	'TOTAL_TICKETS'	=> [
 		0	=> '0 tickets',
 		1	=> '1 ticket',

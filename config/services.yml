@@ -38,3 +38,6 @@ services:
 
     phpbbmodders.trackers.viewticket:
         class: phpbbmodders\trackers\operators\viewticket
+
+    phpbbmodders.trackers.posting:
+        class: phpbbmodders\trackers\operators\posting

@@ -36,10 +36,17 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, [
 	// Common
+	'DESCRIPTION'	=> 'Description',
+
 	'NO_NEW_STATUS'			=> 'This tracker does not have a "new" status',
 	'NO_PAGE_MODE'			=> 'Invalid or no page mode specified.',
 	'NO_REVIEWED_STATUS'	=> 'This tracker does not have a "reviewed" status',
 
+	'REPORTED_BY'	=> 'Reported by',
+
+	'STATUS'	=> 'Status',
+
+	'TITLE'		=> 'Title',
 	'TRACKERS'	=> 'Trackers',
 
 	'UNASSIGNED'	=> 'Unassigned',

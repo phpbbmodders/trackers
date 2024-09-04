@@ -35,8 +35,6 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, [
-	'DESCRIPTION'	=> 'Description',
-
 	'MY_TICKETS'		=> 'Tickets assigned to me',
 	'MY_TICKETS_GROUPS'	=> 'Tickets assigned to me and my groups',
 

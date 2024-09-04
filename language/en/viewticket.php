@@ -76,13 +76,11 @@ $lang = array_merge($lang, [
 
 	'REPLY_WITH_QUOTE'	=> 'Reply with quote',
 	'REPORT_POST'		=> 'Report this post',
-	'REPORTED_BY'		=> 'Reported by',
 	'REPORTED_IP'		=> 'Reported from IP',
 	'REPORTED_ON'		=> 'Reported on',
 
 	'SEND_PM'		=> 'Send PM',
 	'SET_REVIEWED'	=> 'Set to "Reviewed"',
-	'STATUS'		=> 'Status',
 	'STATUS_DESC'	=> '<strong>Your ticket\'s status is "%1$s"</strong><br /><br />%2$s',
 
 	'TICKET_DETAILS'		=> 'Ticket details',
