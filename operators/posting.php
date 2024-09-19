@@ -11,7 +11,7 @@
 namespace phpbbmodders\trackers\operators;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use phpbbmodders\trackers\constants;
+// use phpbbmodders\trackers\constants; NOT IN USE YET!
 
 /**
  * Trackers
@@ -216,29 +216,9 @@ class posting
 			throw new \phpbb\exception\http_exception(404, ($mode == 'post' || $mode == 'reply') ? $this->language->lang('NO_TICKET') : $this->language->lang('NO_POST'));
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		/**
+		 * TODO: More code
+		 */
 
 		$navlinks = [
 			[
