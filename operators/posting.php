@@ -194,7 +194,7 @@ class posting
 					FROM ' . $this->table_prefix . 'trackers_posts post, ' . $this->table_prefix . 'trackers_tickets t, ' . $this->table_prefix . "trackers_projects p
 					WHERE post.post_id = $post_id
 						AND t.ticket_id = post.ticket_id
-						AND p.ticket_id = t.ticket_id"
+						AND p.ticket_id = t.ticket_id";
 //						AND " . $phpbb_content_visibility->get_visibility_sql('post', $forum_id, 'p.');
 			break;
 
