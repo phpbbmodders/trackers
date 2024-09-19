@@ -146,7 +146,7 @@ class posting
 				{
 					$sql = 'SELECT t.ticket_id
 						FROM ' . $this->table_prefix . 'trackers_tickets t, ' . $this->table_prefix . 'trackers_posts post
-						WHERE post.post_id = ' . $post_id . '
+						WHERE post.post_id = ' . (int) $post_id . '
 							AND t.ticket_id = post.ticket_id';
 					$result = $this->db->sql_query($sql);
 					$ticket_id = $this->db->sql_fetchrow($result);

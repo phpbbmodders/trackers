@@ -288,7 +288,7 @@ class viewticket
 		$sql = 'SELECT COUNT(history_id) AS history_total
 			FROM ' . $this->table_prefix . 'trackers_history
 			WHERE ticket_id = ' . (int) $ticket_id . '
-				AND history_type <= ' . $history_type;
+				AND history_type <= ' . (int) $history_type;
 		$result = $this->db->sql_query($sql);
 		$history_total = $this->db->sql_fetchfield('history_total', 0, $result);
 		$this->db->sql_freeresult($result);
@@ -302,7 +302,7 @@ class viewticket
 				AND h.poster_id = u.user_id
 				AND h.history_timestamp < ' . (int) $post_max_timestamp . '
 				AND h.history_timestamp >= ' . (int) $post_min_timestamp . '
-				AND h.history_type <= ' . $history_type . '
+				AND h.history_type <= ' . (int) $history_type . '
 			ORDER BY h.history_timestamp ASC';
 		$history_result = $this->db->sql_query($sql);
 		$history_entries = [];
