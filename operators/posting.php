@@ -208,9 +208,9 @@ class posting
 			throw new \phpbb\exception\http_exception(404, $this->language->lang('NO_POST_MODE'));
 		}
 
-		$result = $db->sql_query($sql);
-		$post_data = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$post_data = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
 
 		if (!$post_data)
 		{
