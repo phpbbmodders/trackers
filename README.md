@@ -20,7 +20,7 @@ An incident, security, bug and feature tracker.
 
 We use automated unit tests to prevent regressions. Check out our build below:
 
-master: [![Build Status](https://github.com/phpbbmodders/trackers/workflows/Tests/badge.svg)](https://github.com/phpbbmodders/trackers/actions)
+[![Tests](https://github.com/phpbbmodders/trackers/actions/workflows/tests.yml/badge.svg)](https://github.com/phpbbmodders/trackers/actions/workflows/tests.yml)
 
 ## License
 
