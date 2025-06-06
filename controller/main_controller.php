@@ -58,6 +58,10 @@ class main_controller
 				return $this->container->get('phpbbmodders.trackers.posting')->display();
 			break;
 
+			case 'search':
+				return $this->container->get('phpbbmodders.trackers.search')->display();
+			break;
+
 			default:
 				throw new \phpbb\exception\http_exception(404, $this->language->lang('NO_PAGE_MODE'));
 			break;

@@ -1,0 +1,123 @@
+{% INCLUDECSS '@phpbbmodders_trackers/common.css' %}
+{% include 'overall_header.html' %}
+
+<div class="main wide">
+	<h2>{{ TRACKER_NAME }}</h2>
+
+	<div class="panel bg1">
+	<div class="inner">
+		<form action="{{ U_SUBMIT }}" method="post">
+		<fieldset class="fields1">
+			<dl>
+				<dt><label for="keywords">Keywords:</label></dt>
+				<dd><input type="text" id="keywords" name="keywords" value="{{ KEYWORDS }}" class="inputbox medium" /></dd>
+			</dl>
+			<dl>
+				<dt><label for="scope_title">Search within:</label></dt>
+				<dd>
+					<label for="scope_title"><input type="checkbox" id="scope_title" name="scope_title" value="1"{% if S_SCOPE_TITLE %} checked="checked"{% endif %} /> Ticket title</label>
+					<label for="scope_report"><input type="checkbox" id="scope_report" name="scope_report" value="1"{% if S_SCOPE_REPORT %} checked="checked"{% endif %} /> Initial report</label>
+					<label for="scope_replies"><input type="checkbox" id="scope_replies" name="scope_replies" value="1"{% if S_SCOPE_REPLIES %} checked="checked"{% endif %} /> Replies</label>
+				</dd>
+			</dl>
+		</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<fieldset class="fields1" style="float: left; width: 50%;">
+			<dl>
+				<dt><label for="project">Project:</label></dt>
+				<dd>
+					<select id="project" name="project_id">
+						<!-- BEGIN projects -->
+						<option value="{projects.ID}"<!-- IF projects.ID == PROJECT_ID --> selected="selected"<!-- ENDIF -->>{projects.NAME}</option>
+						<!-- END -->
+					</select>
+				</dd>
+			</dl>			
+			<dl>
+				<dt><label for="status_id">Status:</label></dt>
+				<dd>
+					<select id="status_id" name="status_id">
+						<!-- BEGIN statuses -->
+						<option value="{statuses.ID}"<!-- IF statuses.ID == STATUS_ID --> selected="selected"<!-- ENDIF -->>{statuses.NAME}</option>
+						<!-- END statuses -->
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="severity_id">Severity:</label></dt>
+				<dd>
+					<select id="severity_id" name="severity_id">
+						<!-- BEGIN severities -->
+						<option value="{severities.ID}"<!-- IF severities.ID == SEVERITY_ID --> selected="selected"<!-- ENDIF -->>{severities.NAME}</option>
+						<!-- END severities -->
+					</select>
+				</dd>
+			</dl>
+		</fieldset>
+		<fieldset class="fields1" style="float: left; width: 50%;">
+			<dl>
+				<dt><label for="assigned-user">Assigned to user:</label></dt>
+				<dd>
+					<select id="assigned-user" name="assigned_user">
+						<!-- BEGIN users -->
+						<option value="{users.ID}"<!-- IF users.ID == ASSIGNED_USER --> selected="selected"<!-- ENDIF -->>{users.NAME}</option>
+						<!-- END users -->
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt><label for="assigned-group">Assigned to group:</label></dt>
+				<dd>
+					<select id="assigned-group" name="assigned_group">
+						<!-- BEGIN groups -->
+						<option value="{groups.ID}"<!-- IF groups.ID == ASSIGNED_GROUP --> selected="selected"<!-- ENDIF -->>{groups.NAME}</option>
+						<!-- END groups -->
+					</select>
+				</dd>
+			</dl>
+		</fieldset>
+		<div style="clear: both;"></div>
+		<fieldset class="fields1">
+			<dl>
+				<dt></dt>
+				<dd><input type="submit" name="submit" value="Search" class="button1" /></dd>
+			</dl>
+		</fieldset>
+		</form>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+	{% if S_RESULTS %}
+	<br clear="all" />
+	{% include 'trackers_search_results.html' %}
+	{% endif %}
+</div>
+
+{% include 'overall_footer.html' %}
